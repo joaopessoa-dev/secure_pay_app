@@ -1,4 +1,4 @@
-package com.example.security_check.Security.crypto
+package com.example.security_check.security.crypto
 
 import javax.crypto.Cipher
 

@@ -1,4 +1,4 @@
-package com.example.security_check.Security.keystore
+package com.example.security_check.security.keystore
 
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec

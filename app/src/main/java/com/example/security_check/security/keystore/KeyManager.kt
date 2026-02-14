@@ -1,4 +1,4 @@
-package com.example.security_check.Security.keystore
+package com.example.security_check.security.keystore
 
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
@@ -6,12 +6,10 @@ import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.util.Log
 import androidx.annotation.RequiresApi
-import org.jetbrains.annotations.Async
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
-import kotlin.math.log
 
 class KeyManager {
     private val keyStore : KeyStore = KeyStore.getInstance(KeyStoreConfig.ANDROID_KEYSTORE_PROVIDER).apply {
@@ -61,11 +59,11 @@ class KeyManager {
             val cipher = Cipher.getInstance(cipherTransformation)
             cipher.init(Cipher.ENCRYPT_MODE,key)
             return true
-        }catch (e : Exception) {
+        }catch (e : KeyPermanentlyInvalidatedException) {
 
             Log.e("isVaultKeyValid", "isVaultKeyValid: $e", )
             false
-        } catch (e : KeyPermanentlyInvalidatedException) {
+        } catch (e : Exception) {
             Log.e("isVaultKeyValid", "KeyPermanentlyInvalidatedException: $e", )
             false
         }
