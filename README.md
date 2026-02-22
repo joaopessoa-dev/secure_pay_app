@@ -1,4 +1,4 @@
-# 🔐 SecurePay Vault
+# 🔐 SecurePayApp
 
 SecurePay Vault is a native Android application that demonstrates **enterprise-grade security practices** for encrypting and storing sensitive data. Built with modern Android development standards and strict Clean Architecture, the app showcases how to properly implement **biometric-bound cryptographic operations** using the Android Keystore system.
 
@@ -8,7 +8,7 @@ This project serves both as a **production-grade security reference** and a **le
 
 ## 📱 Overview
 
-SecurePay Vault simulates secure storage and cryptographic authorization flows using:
+SecurePayApp simulates secure storage and cryptographic authorization flows using:
 
 - Hardware-backed key storage
 - AES-256 GCM authenticated encryption
