@@ -54,8 +54,11 @@ class CryptoEngine(
             Log.e("User No Auth", "prepareEncryption: $e")
             CryptoResult.UserNotAuth
         } catch (e: KeyPermanentlyInvalidatedException) {
+            Log.e("KeyPermanentlyInvalidatedException", "prepareEncryption: $e")
+
             CryptoResult.KeyInvalidated
         } catch (e: Exception) {
+            Log.e("Unknow Error", "prepareEncryption: $e")
             CryptoResult.Error(e)
         }
     }

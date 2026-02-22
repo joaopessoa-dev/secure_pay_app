@@ -42,11 +42,4 @@ class SecurePreferences(
     fun hasStoredData(): Boolean {
         return prefs.contains(KEY_CIPHERTEXT) && prefs.contains(KEY_IV)
     }
-
-    fun clearData() {
-        prefs.edit {
-            remove(KEY_CIPHERTEXT)
-                .remove(KEY_IV)
-        }
-    }
 }
