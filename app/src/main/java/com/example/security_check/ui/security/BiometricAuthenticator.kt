@@ -11,9 +11,6 @@ class BiometricAuthenticator(
     private val activity: FragmentActivity
 ) {
 
-    fun isFingerprintAvailable(): Boolean {
-        return activity.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
-    }
     private var biometricPrompt: BiometricPrompt? = null
 
     fun authenticate(
@@ -77,17 +74,8 @@ class BiometricAuthenticator(
     }
 
     companion object {
-        fun canAuthenticate(activity: FragmentActivity): BiometricStatus {
-            val biometricManager = BiometricManager.from(activity)
-            return when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
-                BiometricManager.BIOMETRIC_SUCCESS -> BiometricStatus.Available
-                BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> BiometricStatus.NoHardware
-                BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> BiometricStatus.HardwareUnavailable
-                BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> BiometricStatus.NoneEnrolled
-                BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> BiometricStatus.SecurityUpdateRequired
-                else -> BiometricStatus.Unknown
-            }
-        }
+
+
 
         fun canAuthenticateWithFingerprint(activity: FragmentActivity): BiometricStatus {
             val hasFingerprint = activity.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)

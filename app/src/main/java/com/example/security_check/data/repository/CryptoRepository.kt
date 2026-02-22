@@ -49,8 +49,4 @@ class CryptoRepository(
     fun hasStoredData(): Boolean {
         return securePreferences.hasStoredData()
     }
-
-    fun clearStoredData() {
-        securePreferences.clearData()
-    }
 }

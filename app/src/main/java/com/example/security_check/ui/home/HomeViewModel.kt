@@ -256,17 +256,6 @@ class HomeViewModel(
             )
         }
     }
-
-    fun dismissBiometricPrompt() {
-        _uiState.update {
-            it.copy(
-                showBiometricPrompt = false,
-                operationType = null,
-                pendingCipher = null
-            )
-        }
-    }
-
     fun clearDecryptedText() {
         _uiState.update { it.copy(decryptedText = "") }
     }

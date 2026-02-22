@@ -6,7 +6,6 @@ import android.util.Log
 import com.example.security_check.security.keystore.KeyManager
 import java.security.InvalidKeyException
 import javax.crypto.Cipher
-import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 class CryptoEngine(
@@ -30,10 +29,13 @@ class CryptoEngine(
             Log.e("User No Auth", "prepareEncryption: $e")
             CryptoResult.UserNotAuth
         } catch (e: KeyPermanentlyInvalidatedException) {
+            Log.e("KeyPermanentlyInvalidatedException", "prepareEncryption: $e")
             CryptoResult.KeyInvalidated
         } catch (e: InvalidKeyException) {
+            Log.e("InvalidKeyException", "prepareEncryption: $e")
             CryptoResult.KeyInvalidated
         } catch (e: Exception) {
+            Log.e("Unknow Error", "prepareEncryption: $e")
             CryptoResult.Error(e)
         }
     }

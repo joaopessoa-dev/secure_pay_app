@@ -3,6 +3,7 @@ package com.example.security_check.data.storage
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Base64
+import androidx.core.content.edit
 
 class SecurePreferences(
     context: Context
@@ -19,10 +20,10 @@ class SecurePreferences(
     )
 
     fun saveEncryptedData(cipherText: ByteArray, iv: ByteArray) {
-        prefs.edit()
-            .putString(KEY_CIPHERTEXT, Base64.encodeToString(cipherText, Base64.NO_WRAP))
-            .putString(KEY_IV, Base64.encodeToString(iv, Base64.NO_WRAP))
-            .apply()
+        prefs.edit {
+            putString(KEY_CIPHERTEXT, Base64.encodeToString(cipherText, Base64.NO_WRAP))
+                .putString(KEY_IV, Base64.encodeToString(iv, Base64.NO_WRAP))
+        }
     }
 
     fun getEncryptedData(): Pair<ByteArray, ByteArray>? {
@@ -43,9 +44,9 @@ class SecurePreferences(
     }
 
     fun clearData() {
-        prefs.edit()
-            .remove(KEY_CIPHERTEXT)
-            .remove(KEY_IV)
-            .apply()
+        prefs.edit {
+            remove(KEY_CIPHERTEXT)
+                .remove(KEY_IV)
+        }
     }
 }
