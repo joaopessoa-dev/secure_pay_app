@@ -2,6 +2,7 @@ package com.example.security_check.security.crypto
 
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
+import android.util.Log
 import com.example.security_check.security.keystore.KeyManager
 import java.security.InvalidKeyException
 import javax.crypto.Cipher
@@ -26,11 +27,8 @@ class CryptoEngine(
             CryptoResult.AuthRequired(cipher)
 
         } catch (e: UserNotAuthenticatedException) {
-            CryptoResult.AuthRequired(
-                Cipher.getInstance(keyManager.cipherTransformation).apply {
-                    init(Cipher.ENCRYPT_MODE, key)
-                }
-            )
+            Log.e("User No Auth", "prepareEncryption: $e")
+            CryptoResult.UserNotAuth
         } catch (e: KeyPermanentlyInvalidatedException) {
             CryptoResult.KeyInvalidated
         } catch (e: InvalidKeyException) {

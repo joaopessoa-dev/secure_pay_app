@@ -49,9 +49,12 @@ sealed class CryptoResult {
 
     object KeyNotFound : CryptoResult()
 
+    object UserNotAuth: CryptoResult()
     data class AuthRequired (
         val cipher : Cipher
     ) : CryptoResult()
+
+
 
     data class Error(
         val exception: Exception,
