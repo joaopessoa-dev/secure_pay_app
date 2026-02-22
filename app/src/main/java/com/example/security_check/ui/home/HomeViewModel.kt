@@ -148,6 +148,14 @@ class HomeViewModel(
                         )
                     }
                 }
+                is CryptoResult.UserNotAuth ->  {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = "User Not Authenticated with Finger Print. Authenticate with finger print on your phone"
+                        )
+                    }
+                }
                 else -> {
                     _uiState.update { it.copy(isLoading = false) }
                 }

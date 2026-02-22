@@ -49,6 +49,15 @@ class MainActivity : FragmentActivity() {
                     HomeScreen(
                         viewModel = viewModel,
                         onBiometricAuthRequired = {
+                            val fingerprintStatus = BiometricAuthenticator.canAuthenticateWithFingerprint(this@MainActivity)
+                            if (!fingerprintStatus.isAvailable()) {
+                                viewModel.onBiometricError(
+                                    fingerprintStatus.getErrorMessage()
+                                        ?: "Fingerprint authentication required"
+                                )
+                                return@HomeScreen
+                            }
+
                             uiState.pendingCipher?.let { cipher ->
                                 biometricAuthenticator.authenticate(
                                     cipher = cipher,
@@ -94,9 +103,9 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun checkBiometricAvailability() {
-        when (val status = BiometricAuthenticator.canAuthenticate(this)) {
+        when (val status = BiometricAuthenticator.canAuthenticateWithFingerprint(this)) {
             is BiometricStatus.Available -> {
-                Toast.makeText(this,"Biometric Authenticator is ok", Toast.LENGTH_LONG).show()
+
             }
             else -> {
                 status.getErrorMessage()?.let { errorMessage ->

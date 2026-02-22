@@ -49,12 +49,8 @@ class CryptoEngine(
             CryptoResult.AuthRequired(cipher)
 
         } catch (e: UserNotAuthenticatedException) {
-            CryptoResult.AuthRequired(
-                Cipher.getInstance(keyManager.cipherTransformation).apply {
-                    val spec = GCMParameterSpec(GCM_BITS_TAG_LENGTH, iv)
-                    init(Cipher.DECRYPT_MODE, key, spec)
-                }
-            )
+            Log.e("User No Auth", "prepareEncryption: $e")
+            CryptoResult.UserNotAuth
         } catch (e: KeyPermanentlyInvalidatedException) {
             CryptoResult.KeyInvalidated
         } catch (e: Exception) {

@@ -1,5 +1,6 @@
 package com.example.security_check.ui.security
 
+import android.content.pm.PackageManager
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -9,6 +10,10 @@ import javax.crypto.Cipher
 class BiometricAuthenticator(
     private val activity: FragmentActivity
 ) {
+
+    fun isFingerprintAvailable(): Boolean {
+        return activity.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
+    }
     private var biometricPrompt: BiometricPrompt? = null
 
     fun authenticate(
@@ -50,9 +55,9 @@ class BiometricAuthenticator(
         biometricPrompt = BiometricPrompt(activity, executor, callback)
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Biometric Authentication")
+            .setTitle("Fingerprint Authentication")
             .setSubtitle("Authenticate to access secure data")
-            .setDescription("Use your fingerprint or face to encrypt/decrypt data")
+            .setDescription("Use your fingerprint to encrypt/decrypt data")
             .setNegativeButtonText("Cancel")
             .setConfirmationRequired(true)
             .build()
@@ -83,6 +88,23 @@ class BiometricAuthenticator(
                 else -> BiometricStatus.Unknown
             }
         }
+
+        fun canAuthenticateWithFingerprint(activity: FragmentActivity): BiometricStatus {
+            val hasFingerprint = activity.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
+            if (!hasFingerprint) {
+                return BiometricStatus.FingerprintNotAvailable
+            }
+
+            val biometricManager = BiometricManager.from(activity)
+            return when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
+                BiometricManager.BIOMETRIC_SUCCESS -> BiometricStatus.Available
+                BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> BiometricStatus.NoHardware
+                BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> BiometricStatus.HardwareUnavailable
+                BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> BiometricStatus.FingerprintNotEnrolled
+                BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> BiometricStatus.SecurityUpdateRequired
+                else -> BiometricStatus.Unknown
+            }
+        }
     }
 }
 
@@ -92,6 +114,8 @@ sealed class BiometricStatus {
     object HardwareUnavailable : BiometricStatus()
     object NoneEnrolled : BiometricStatus()
     object SecurityUpdateRequired : BiometricStatus()
+    object FingerprintNotAvailable : BiometricStatus()
+    object FingerprintNotEnrolled : BiometricStatus()
     object Unknown : BiometricStatus()
 
     fun isAvailable(): Boolean = this is Available
@@ -102,6 +126,8 @@ sealed class BiometricStatus {
         is HardwareUnavailable -> "Biometric hardware is currently unavailable"
         is NoneEnrolled -> "No biometric credentials enrolled. Please set up fingerprint or face unlock in device settings."
         is SecurityUpdateRequired -> "Security update required for biometric authentication"
+        is FingerprintNotAvailable -> "Fingerprint hardware not available. Only fingerprint authentication is allowed for encryption."
+        is FingerprintNotEnrolled -> "No fingerprint enrolled. Please set up fingerprint in device settings. Face authentication is not allowed."
         is Unknown -> "Biometric authentication status unknown"
     }
 }
